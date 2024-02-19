@@ -41,6 +41,7 @@ public class DoctorDAO {
                         + date + "' and a.doctor.id = " + doctorId +
                         " and a.past = false order by a.time ", Appointment.class)
                 .getResultList();
+        System.out.println("here");
         return appointments;
     }
 
