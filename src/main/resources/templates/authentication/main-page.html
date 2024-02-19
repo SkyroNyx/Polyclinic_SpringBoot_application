@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>вход</title>
+</head>
+<style>
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    .main-content {
+        background-color: #6fc9fd;
+        width: 25%;
+        height: 100vh;
+        color: white;
+    }
+
+    .onCenter {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .button {
+        height: 30px;
+        background-color: #6fc9fd;
+        border-color: #d1eaf8;
+        border-radius: 5px;
+        color: white;
+        width: 170px;
+        font-size: 14px;
+    }
+</style>
+<body>
+<div class="main-content onCenter">
+    <br>
+    <br>
+    <a th:href="@{/auth/sickLoginPage}"><button class="button onCenter">войти как посетитель</button></a>
+    <br>
+    <br>
+    <a th:href="@{/auth/registrationPage}"><button class="button onCenter">зарегестрироваться</button></a>
+    <br>
+    <br>
+    <a th:href="@{/auth/doctorLoginPage}"><button class="button onCenter">войти как врач</button></a>
+
+</div>
+</body>
+</html>

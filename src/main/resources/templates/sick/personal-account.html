@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мой аккаунт</title>
+</head>
+<style>
+
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .first-column {
+        position: fixed;
+        float: left;
+        width: 13%;
+        background-color: #6fc9fd;
+        height: 100vh;
+    }
+
+    .nav-list {
+        list-style: none;
+        text-decoration: none;
+    }
+
+    .nav-list-element {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 7px;
+        background-color: #6fc9fd;
+        border: none;
+    }
+
+    .logout-list-button {
+        position: relative;
+        font-size: 16px;
+        right: 6px;
+    }
+
+    .nav-list-element:hover {
+        font-size: 19px;
+        text-decoration: underline white;
+    }
+
+    .second-column {
+        position: relative;
+        left: 13%;
+        float: left;
+        width: 40%;
+    }
+
+    .onCenter {
+        width: max-content;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .profile {
+        width: 80%;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: rgba(252, 252, 252);
+        border: 1px solid rgba(126, 125, 125);
+        border-radius: 10px;
+    }
+
+    .space {
+        height: 5px;
+    }
+
+    .fields {
+        font-size: 17px;
+        display: inline-block;
+        position: relative;
+        margin-left: 20px;
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .values {
+        font-size: 17px;
+        display: inline-block;
+        margin-left: 20px;
+    }
+
+    .buttons {
+        text-align: center;
+    }
+
+    .button {
+        width: 250px;
+        height: 30px;
+        background-color: #6fc9fd;
+        border-color: #6fc9fd;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .main-font {
+        font-size: 18px;
+    }
+
+    .third-column {
+        position: relative;
+        left: 13%;
+        float: left;
+        width: 45%;
+        text-align: center;
+    }
+
+    .appointment {
+        text-align: center;
+        display: table;
+    }
+
+    .appointment-row {
+        display: table-row;
+    }
+
+    .appointment-cell1, .appointment-cell2,
+    .appointment-cell3, .appointment-cell4{
+        padding: 6px  0 6px 0;
+        border: 1px solid #000;
+        display: table-cell;
+    }
+
+    .appointment-cell1 {
+        width: 150px;
+    }
+
+    .appointment-cell2 {
+        width: 80px;
+    }
+
+    .appointment-cell3 {
+        width: 250px;
+    }
+
+    .appointment-cell4 {
+        width: 250px;
+    }
+
+</style>
+<body>
+<div class="first-column">
+    <ul class="nav-list">
+        <li><a th:href="@{/sick}" class="nav-list-element">Личный кабинет</a></li>
+        <li><a th:href="@{/sick/doctors}" class="nav-list-element">Список докторов</a></li>
+        <li><a th:href="@{/sick/prescriptions}" class="nav-list-element">Мои назначения</a></li>
+        <li><a th:href="@{/sick/about-polyclinic}" class="nav-list-element">О поликлинике</a></li>
+        <li>
+            <form action="/sick/logout" method="post">
+                <input type="submit" value="Выход" class="nav-list-element logout-list-button">
+            </form>
+        </li>
+    </ul>
+</div>
+
+<div class="second-column">
+    <h2 class="onCenter">Мой профиль</h2>
+    <div class="profile">
+        <div class="fields">
+            ФИО:
+            <div class="space"></div>
+            Номер телефона:
+            <div class="space"></div>
+            Почта:
+            <div class="space"></div>
+            Медецинская группа:
+            <div class="space"></div>
+        </div>
+        <div class="values" >
+            <div th:text="${sick.getSurname() + ' ' + sick.getFirstName() + ' ' + sick.getLastName()}"></div>
+            <div class="space"></div>
+            <div th:text="${sick.getPhoneNumber()}"></div>
+            <div class="space"></div>
+            <div th:text="${sick.getEmail()}"></div>
+            <div class="space"></div>
+            <div th:text="${sick.getDisability()}"></div>
+            <div class="space"></div>
+        </div>
+    </div>
+    <div class="buttons">
+        <br>
+        <a th:href="@{/sick/update}"><button class="button">Изменить контактные данные</button></a>
+        <br>
+        <br>
+        <a th:href="@{/sick/doctors}"><button class="button">Записаться на прием</button></a>
+        <br>
+        <br>
+        <a th:href="@{/sick/prescriptions}"><button class="button">Мои назначения</button></a>
+    </div>
+</div>
+
+<div class="third-column">
+    <p class="main-font">
+        Для отмены или переноса записи свяжитесь с врачом по телефону</p>
+    <h2>Мои записи на прием</h2>
+
+    <div class="appointment">
+        <div class="appointment-row">
+            <div class="appointment-cell1">Дата</div>
+            <div class="appointment-cell2">Время</div>
+            <div class="appointment-cell3">Врач</div>
+            <div class="appointment-cell4">Жалобы</div>
+        </div>
+        <div class="appointment-row" th:each="appointment : ${appointments}">
+            <div class="appointment-cell1" th:text="${appointment.getFormatedDate()}">Дата</div>
+            <div class="appointment-cell2" th:text="${appointment.getFormatedTime()}">Время</div>
+            <div class="appointment-cell3">
+                <a th:href="@{/sick/doctor/{doctorId}(doctorId=${appointment.getDoctor().getId()})}"
+                   th:text="${appointment.getDoctor().getSurname() + ' ' + appointment.getDoctor().getFirstName()
+            + ' ' + appointment.getDoctor().getLastName()}">Врач</a>
+            </div>
+            <div class="appointment-cell4" th:text="${appointment.getComplaints()}">Жалобы</div>
+        </div>
+    </div>
+
+    <p th:if="${appointments.isEmpty()}">На данный момент у вас нет записей</p>
+
+</div>
+</body>
+</html>

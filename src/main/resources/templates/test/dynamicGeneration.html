@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+
+
+
+<style>
+  .prescriptions-label-row {
+    display: table-row;
+    text-align: center;
+    width: max-content;
+  }
+  .prescriptions-label-cell1,.prescriptions-label-cell2,.prescriptions-label-cell3,
+  .prescriptions-label-cell4,.prescriptions-label-cell5,.prescriptions-label-cell6 {
+    border: 1px solid black;
+    height: 30px;
+    display: table-cell;
+  }
+  .prescriptions-label-cell1 {
+    vertical-align: middle;
+    width: 80px;
+  }
+  .prescriptions-label-cell2 {
+    vertical-align: middle;
+    width: 240px;
+  }
+  .prescriptions-label-cell3 {
+    vertical-align: middle;
+    width: 200px;
+  }
+  .prescriptions-label-cell4 {
+    vertical-align: middle;
+    width: 150px;
+  }
+  .prescriptions-label-cell5 {
+    vertical-align: middle;
+    width: 250px;
+  }
+  .prescriptions-label-cell6 {
+    vertical-align: middle;
+    width: 250px;
+  }
+
+</style>
+<button type="button" onclick="printPrescriptions()"></button>
+<div class="prescriptions-label-row">
+  <div class="prescriptions-label-cell1">время</div>
+  <div class="prescriptions-label-cell2">ФИО больного</div>
+  <div class="prescriptions-label-cell3">жалобы</div>
+  <div class="prescriptions-label-cell4">диагноз</div>
+  <div class="prescriptions-label-cell5">рекомендации</div>
+  <div class="prescriptions-label-cell6">лекарства</div>
+</div>
+<div id="prescriptions" style="width: max-content;"></div>
+<script>
+  function printPrescriptions() {
+    // const phoneInput = document.getElementById('phone');
+    // const phoneValue = phoneInput.value.replace(/\D/g, '');
+    var prescriptions = document.getElementById('prescriptions');
+    prescriptions.innerHTML = '';
+    for (let i = 0; i < 1; i++) {
+      var date = document.createElement('div');
+      date.innerHTML = '21-05-2007';
+      date.style.marginTop = '10px';
+      date.style.marginBottom = '10px';
+      date.style.fontSize = '20px';
+      var tableRow = document.createElement('div');
+
+      tableRow.style.display = 'table-row';
+      tableRow.style.textAlign = 'center';
+      var tableCell1 = document.createElement('div');
+      tableCell1.style.paddingTop = '6px';
+      tableCell1.style.paddingBottom = '6px';
+      tableCell1.style.verticalAlign = 'middle';
+      tableCell1.style.width = '80px';
+      tableCell1.style.display = 'table-cell';
+      tableCell1.style.border = '1px solid black';
+      var tableCell2 = document.createElement('div');
+      tableCell2.style.paddingTop = '6px';
+      tableCell2.style.paddingBottom = '6px';
+      tableCell2.style.verticalAlign = 'middle';
+      tableCell2.style.width = '240px';
+      tableCell2.style.display = 'table-cell';
+      tableCell2.style.border = '1px solid black';
+      var tableCell3 = document.createElement('div');
+      tableCell3.style.paddingTop = '6px';
+      tableCell3.style.paddingBottom = '6px';
+      tableCell3.style.verticalAlign = 'middle';
+      tableCell3.innerHTML = phoneValue;
+      tableCell3.style.width = '200px';
+      tableCell3.style.display = 'table-cell';
+      tableCell3.style.border = '1px solid black';
+      var tableCell4 = document.createElement('div');
+      tableCell4.style.paddingTop = '6px';
+      tableCell4.style.paddingBottom = '6px';
+      tableCell4.style.verticalAlign = 'middle';
+      tableCell4.innerHTML = phoneValue;
+      tableCell4.style.width = '150px';
+      tableCell4.style.display = 'table-cell';
+      tableCell4.style.border = '1px solid black';
+      var tableCell5 = document.createElement('div');
+      tableCell5.style.paddingTop = '6px';
+      tableCell5.style.paddingBottom = '6px';
+      tableCell5.style.verticalAlign = 'middle';
+      tableCell5.innerHTML = phoneValue;
+      tableCell5.style.width = '250px';
+      tableCell5.style.display = 'table-cell';
+      tableCell5.style.border = '1px solid black';
+      var tableCell6 = document.createElement('div');
+      tableCell6.style.paddingTop = '6px';
+      tableCell6.style.paddingBottom = '6px';
+      tableCell6.style.verticalAlign = 'middle';
+      tableCell6.innerHTML = 'fsdadfa afsdf adsafas';
+      tableCell6.style.width = '250px';
+      tableCell6.style.display = 'table-cell';
+      tableCell6.style.border = '1px solid black';
+      tableRow.appendChild(tableCell1);
+      tableRow.appendChild(tableCell2);
+      tableRow.appendChild(tableCell3);
+      tableRow.appendChild(tableCell4);
+      tableRow.appendChild(tableCell5);
+      tableRow.appendChild(tableCell6);
+      prescriptions.appendChild(date);
+      prescriptions.appendChild(tableRow);
+    }
+  }
+</script>
+
+
+
+
+
+<button onclick="printDoctors()">tre</button>
+<div id="doctorsList"></div>
+<script>
+  function printDoctors() {
+    var doctorsList = document.getElementById('doctorsList');
+    doctorsList.innerHTML = '';
+    for (let i = 0; i < 1; i++) {
+      var a = document.createElement('a');
+      a.href = '#';
+      a.style.textDecoration = 'none';
+      a.style.color = 'black';
+      var divElement = document.createElement('div');
+      divElement.style.marginTop = '20px';
+      divElement.style.border = 'gray 1px solid'
+      divElement.style.backgroundColor = 'white';
+      divElement.style.borderRadius = '8px';
+      divElement.style.padding = '20px';
+      divElement.style.width = '100%';
+      var labelsDiv = document.createElement('div');
+      labelsDiv.innerHTML = 'ФИО:<br>Специализация:<br>Категория:<br>Стаж (часов):<br>Рейтинг:<br>Стоимость приема (руб):';
+      labelsDiv.style.textAlign = 'right';
+      labelsDiv.style.display = 'inline-block';
+      labelsDiv.style.fontWeight = '550';
+      var valuesDiv = document.createElement('div');
+      valuesDiv.innerHTML = 'Марсунбеков марсунбек Марсунбекович<br>' +
+              'Невролог<br>Высшая<br>1000<br>7.5/10<br>1500';
+      valuesDiv.style.display = 'inline-block';
+      valuesDiv.style.marginLeft = '10px';
+      divElement.appendChild(labelsDiv);
+      divElement.appendChild(valuesDiv);
+      a.appendChild(divElement);
+      doctorsList.appendChild(a);
+    }
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+<button type="button" onclick="printAppointments()">qwe</button>
+<div id="appointments">
+</div>
+<script>
+    function printAppointments() {
+        var appointments = document.getElementById('appointments');
+        appointments.innerHTML = '';
+        for (let i = 0; i < 1; i++) {
+            var labelDiv = document.createElement('div');
+            labelDiv.style.marginLeft = '28px';
+            var labelRow = document.createElement('div');
+            labelRow.style.textAlign = 'center';
+            labelRow.style.display = 'table-row';
+            var labelCell1 = document.createElement('div');
+            labelCell1.style.padding = '6px  0 6px 0';
+            labelCell1.style.display = 'table-cell';
+            labelCell1.style.border = '1px solid black';
+            labelCell1.style.verticalAlign = 'middle';
+            labelCell1.innerHTML = 'Время';
+            labelCell1.style.width = '80px';
+            labelCell1.style.marginLeft = '26px';
+            var labelCell2 = document.createElement('div');
+            labelCell2.style.padding = '6px  0 6px 0';
+            labelCell2.style.display = 'table-cell';
+            labelCell2.style.border = '1px solid black';
+            labelCell2.style.verticalAlign = 'middle';
+            labelCell2.innerHTML = 'ФИО';
+            labelCell2.style.width = '250px';
+            var labelCell3 = document.createElement('div');
+            labelCell3.style.padding = '6px  0 6px 0';
+            labelCell3.style.display = 'table-cell';
+            labelCell3.style.border = '1px solid black';
+            labelCell3.style.verticalAlign = 'middle';
+            labelCell3.innerHTML = 'Жалобы';
+            labelCell3.style.width = '250px';
+            var labelCell4 = document.createElement('div');
+            labelCell4.style.padding = '6px  0 6px 0';
+            labelCell4.style.display = 'table-cell';
+            labelCell4.style.border = '1px solid black';
+            labelCell4.style.verticalAlign = 'middle';
+            labelCell4.innerHTML = 'Документы';
+            labelCell4.style.width = '200px';
+            labelRow.appendChild(labelCell1);
+            labelRow.appendChild(labelCell2);
+            labelRow.appendChild(labelCell3);
+            labelRow.appendChild(labelCell4);
+            labelDiv.appendChild(labelRow);
+            appointments.appendChild(labelDiv);
+            for (let j = 0; j < 3; j++) {
+                var appointmentDiv = document.createElement('div');
+                var accordionButtonImg = document.createElement('div');
+                accordionButtonImg.id = 'abi' + j;
+                accordionButtonImg.style.width = '0';
+                accordionButtonImg.style.height = '0';
+                accordionButtonImg.style.borderTop = '10px solid transparent';
+                accordionButtonImg.style.borderBottom = '10px solid transparent';
+                accordionButtonImg.style.borderRight = '10px solid #000';
+                accordionButtonImg.style.transform = 'rotate(-90deg)';
+                var accordionButton = document.createElement('button');
+                accordionButton.id = 'accordionButton' + j;
+                accordionButton.style.marginTop = '2px';
+                accordionButton.style.width = '26px';
+                accordionButton.style.height = '26px';
+                accordionButton.style.marginRight = '2px';
+                accordionButton.style.cursor = 'pointer';
+                var row = document.createElement('div');
+                row.style.textAlign = 'center';
+                row.style.display = 'table-row';
+                var cell1 = document.createElement('div');
+                cell1.style.padding = '6px  0 6px 0';
+                cell1.style.display = 'table-cell';
+                cell1.style.border = '1px solid black';
+                cell1.style.verticalAlign = 'middle';
+                cell1.innerHTML = 'Время' + j;
+                cell1.style.width = '80px';
+                cell1.style.marginLeft = '26px';
+                var cell2 = document.createElement('div');
+                cell2.style.padding = '6px  0 6px 0';
+                cell2.style.display = 'table-cell';
+                cell2.style.border = '1px solid black';
+                cell2.style.verticalAlign = 'middle';
+                cell2.innerHTML = 'ФИО' + j;
+                cell2.style.width = '250px';
+                var cell3 = document.createElement('div');
+                cell3.style.padding = '6px  0 6px 0';
+                cell3.style.display = 'table-cell';
+                cell3.style.border = '1px solid black';
+                cell3.style.verticalAlign = 'middle';
+                cell3.innerHTML = 'Жалобы' + j;
+                cell3.style.width = '250px';
+                var cell4 = document.createElement('div');
+                cell4.style.padding = '6px  0 6px 0';
+                cell4.style.display = 'table-cell';
+                cell4.style.border = '1px solid black';
+                cell4.style.verticalAlign = 'middle';
+                cell4.innerHTML = 'Документы' + j;
+                cell4.style.width = '200px';
+                var accordionContent = document.createElement('div');
+                accordionContent.hidden = true;
+                accordionContent.id = 'accordionContent' + j;
+                accordionContent.style.backgroundColor = 'white';
+                accordionContent.style.border = '1px solid rgb(150,150,150)';
+                accordionContent.style.marginLeft = '28px';
+                accordionContent.style.padding = '6px  0 6px 0';
+                var makePrescriptionButton = document.createElement('button');
+                makePrescriptionButton.style.marginLeft = '10px';
+                makePrescriptionButton.innerHTML = 'Назначить лечение';
+                var rescheduleAppointmentButton = document.createElement('button');
+                rescheduleAppointmentButton.style.marginLeft = '10px';
+                rescheduleAppointmentButton.innerHTML = 'Перенести прием';
+                var cancelAppointmentButton = document.createElement('button');
+                cancelAppointmentButton.style.marginLeft = '10px';
+                cancelAppointmentButton.innerHTML = 'Отменить прием';
+                accordionButton.appendChild(accordionButtonImg);
+                row.appendChild(accordionButton);
+                row.appendChild(cell1);
+                row.appendChild(cell2);
+                row.appendChild(cell3);
+                row.appendChild(cell4);
+                appointmentDiv.appendChild(row);
+                accordionContent.appendChild(makePrescriptionButton);
+                accordionContent.appendChild(rescheduleAppointmentButton);
+                accordionContent.appendChild(cancelAppointmentButton);
+                appointmentDiv.appendChild(accordionContent);
+                appointments.appendChild(appointmentDiv);
+
+
+                document.getElementById('accordionButton' + j).addEventListener('click', () => {
+                    if (document.getElementById('accordionContent' + j).hidden == false) {
+                        document.getElementById('accordionContent' + j).hidden = true;
+                    } else {
+                        document.getElementById('accordionContent' + j).hidden = false;
+                    }
+                    if  (document.getElementById('abi' + j).style.transform == 'rotate(-90deg)')
+                        document.getElementById('abi' + j).style.transform = 'rotate(-180deg)'
+                    else
+                        document.getElementById('abi' + j).style.transform = 'rotate(-90deg)';
+                });
+            }
+        }
+    }
+</script>
+
+
+
+
+<div class="third-column">
+    <p>назначения больного: </p>
+    <br>
+    <form th:action="@{/doctor/{did}/sick/{id}(did=${doctor.getId()},id=${sick.getId()})}" method="get" id="withMeForm">
+        <label th:if="${withMeList.isEmpty()}">
+            <input type="checkbox" name="withMe" onchange="document.getElementById('withMeForm').submit()">
+            мои назначения
+        </label>
+        <label th:if="${!withMeList.isEmpty()}">
+            <input type="checkbox" name="withMe" onchange="document.getElementById('withMeForm').submit()" checked>
+            мои назначения
+        </label>
+    </form>
+    <br>
+    <br>
+
+
+    <style>
+        .appointment__label {
+            text-align: center;
+            display: table;
+        }
+        .appointment__label__row {
+            border: 1px solid #000;
+            border-radius: 3px;
+            height: 25px;
+            display: table-row;
+        }
+        .appointment__label__cell1 {
+            width: 50px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label__cell2 {
+            width: 150px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label__cell3 {
+            width: 110px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label__cell4 {
+            width: 120px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label__cell5 {
+            width: 100px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label__cell6 {
+            width: 140px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label__cell7 {
+            width: 140px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+    </style>
+    <div class="appointment__label">
+        <div class="appointment__label__row">
+            <div class="appointment__label__cell1">время</div>
+            <div class="appointment__label__cell2">ФИО врача</div>
+            <div class="appointment__label__cell3">специализация</div>
+            <div class="appointment__label__cell4">жалобы</div>
+            <div class="appointment__label__cell5">диагноз</div>
+            <div class="appointment__label__cell6">рекомендации</div>
+            <div class="appointment__label__cell7">лекарства</div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <style>
+        .appointment__label1 {
+            text-align: center;
+            display: table;
+        }
+        .appointment__label1__row {
+            border: 1px solid #000;
+            border-radius: 3px;
+            height: 25px;
+            display: table-row;
+        }
+        .appointment__label1__cell1 {
+            width: 50px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label1__cell2 {
+            width: 200px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label1__cell3 {
+            width: 130px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label1__cell4 {
+            width: 220px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+        .appointment__label1__cell5 {
+            width: 233px;
+            border: 1px solid #000;
+            padding: 5px;
+            display: table-cell;
+        }
+    </style>
+    <div class="appointment__label1">
+        <div class="appointment__label1__row">
+            <div class="appointment__label1__cell1">время</div>
+            <div class="appointment__label1__cell2">жалобы</div>
+            <div class="appointment__label1__cell3">диагноз</div>
+            <div class="appointment__label1__cell4">рекомендации</div>
+            <div class="appointment__label1__cell5">лекарства</div>
+        </div>
+    </div>
+    <br>
+    <br>
+</div>
+
+</body>
+</html>

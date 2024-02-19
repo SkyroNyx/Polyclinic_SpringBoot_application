@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${sick.getSurname() + ' ' + sick.getFirstName() + ' ' + sick.getLastName()}"></title>
+</head>
+<style>
+
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .first-column {
+        float: left;
+        width: 13%;
+        background-color: #6fc9fd;
+        height: 100vh;
+    }
+
+    .nav-list {
+        list-style: none;
+        text-decoration: none;
+    }
+
+    .nav-list-element {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 7px;
+        background-color: #6fc9fd;
+        border: none;
+    }
+
+    .logout-list-button {
+        position: relative;
+        font-size: 16px;
+        right: 6px;
+    }
+
+    .nav-list-element:hover {
+        font-size: 19px;
+        text-decoration: underline white;
+    }
+
+    .second-column {
+        float: left;
+        width: 40%;
+        margin-left: 50px;
+    }
+
+    .onCenter {
+        width: max-content;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .profile {
+        width: 80%;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: rgba(252, 252, 252);
+        border: 1px solid rgba(126, 125, 125);
+        border-radius: 10px;
+    }
+
+    .fields {
+        font-size: 17px;
+        display: inline-block;
+        position: relative;
+        margin-left: 20px;
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .values {
+        font-size: 17px;
+        display: inline-block;
+        margin-left: 20px;
+    }
+
+    .space {
+        height: 5px;
+    }
+
+</style>
+<body>
+<div class="first-column">
+    <ul class="nav-list">
+        <li><a th:href="@{/doctor}" class="nav-list-element">Личный кабинет</a></li>
+        <li><a th:href="@{/doctor/prescriptions}" class="nav-list-element ">Мои назначения</a></li>
+        <li>
+            <form action="/doctor/logout" method="post">
+                <input type="submit" value="Выход" class="nav-list-element logout-list-button">
+            </form>
+        </li>
+    </ul>
+</div>
+<div class="second-column">
+    <h2 class="onCenter">Профиль пациента</h2>
+    <div class="profile">
+        <div class="fields">
+            ФИО:
+            <div class="space"></div>
+            Номер телефона:
+            <div class="space"></div>
+            Почта:
+            <div class="space"></div>
+            Медицинская группа:
+            <div class="space"></div>
+        </div>
+        <div class="values" >
+            <div th:text="${sick.getSurname() + ' ' + sick.getFirstName() + ' ' + sick.getLastName()}"></div>
+            <div class="space"></div>
+            <div th:text="${sick.getPhoneNumber()}"></div>
+            <div class="space"></div>
+            <div th:text="${sick.getEmail()}"></div>
+            <div class="space"></div>
+            <div th:text="${sick.getDisability()}"></div>
+            <div class="space"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

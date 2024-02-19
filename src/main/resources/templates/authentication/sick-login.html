@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>вход</title>
+</head>
+<style>
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    .main-content {
+        background-color: #6fc9fd;
+        width: 25%;
+        height: 100vh;
+        color: white;
+    }
+
+    .onCenter {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .big-label {
+        text-align: center;
+        font-size: 26px;
+    }
+
+    .label {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .input {
+        height: 30px;
+        background-color: #d6f0ff;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .button {
+        margin-top: 10px;
+        height: 30px;
+        background-color: #6fc9fd;
+        border-color: #d1eaf8;
+        border-radius: 5px;
+        color: white;
+        width: 150px;
+        font-size: 14px;
+    }
+
+    .error {
+        margin-top: 10px;
+        padding: 3px;
+        height: auto;
+        width: 160px;
+        background-color: #ffd993;
+        color: brown;
+        border: 1px solid #a66969;
+        border-radius: 5px;
+        text-align: center;
+    }
+</style>
+<body>
+<div class="main-content onCenter">
+    <form th:action="@{/sick/loginAsSick}" th:name="sickLoginForm" th:method="post">
+<!--        <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}"/>-->
+        <br>
+        <p class="big-label">Войти как посетитель</p>
+        <p class="label">Введите почту или номер телефона:</p>
+        <input type="text" name="username" id="username" class="input onCenter">
+        <p class="label">Введите пароль:</p>
+        <input type="password" name="password" id="password" class="input onCenter">
+        <div th:if="${param.error}" class="error onCenter">Неверный логин или пароль</div>
+        <div>
+            <input type="submit" value="Войти" class="button onCenter">
+        </div>
+    </form>
+    <a href="/auth"><button class="button onCenter">На главную</button></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>регистрация</title>
+</head>
+<style>
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    .main-content {
+        background-color: #6fc9fd;
+        width: 25%;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+
+    }
+
+    .onCenter {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .label {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .input {
+        height: 30px;
+        background-color: #d6f0ff;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .button {
+        margin-top: 10px;
+        height: 30px;
+        background-color: #6fc9fd;
+        border-color: #d1eaf8;
+        border-radius: 5px;
+        color: white;
+        width: 150px;
+        font-size: 14px;
+    }
+
+    .label {
+        font-size: 18px;
+        margin: 7px;
+    }
+
+    .error {
+        margin-top: 10px;
+        padding: 3px;
+        height: auto;
+        width: 160px;
+        background-color: #ffd993;
+        color: brown;
+        border: 1px solid #a66969;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+</style>
+<body>
+<div class="main-content onCenter">
+    <form th:action="@{/auth/register}" method="post" id="registerForm" name="registerForm" th:object="${sick}">
+        <br>
+        <div class="label onCenter">Фамилия:</div>
+        <input type="text" id="surname" class="input onCenter" th:field="*{surname}">
+        <div class="error onCenter" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+        <div class="label onCenter">Имя:</div>
+        <input type="text" id="firstName" class="input onCenter" th:field="*{firstName}">
+        <div class="error onCenter" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+        <div class="label onCenter">Отчество:</div>
+        <input type="text" id="lastName" class="input onCenter" th:field="*{lastName}">
+        <div class="error onCenter" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+        <div class="label onCenter" >Номер телефона:</div>
+        <input type="tel" id="phoneNumber" class="input onCenter" th:field="*{phoneNumber}" placeholder="+7(000)000-00-00">
+        <div class="error onCenter" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+        <div class="label onCenter">Почта:</div>
+        <input type="email" id="email" class="input onCenter" th:field="*{email}">
+        <div class="error onCenter" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        <div class="label onCenter">Пароль:</div>
+        <input type="password" id="password" class="input onCenter" th:field="*{password}">
+        <div class="error onCenter" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+        <div class="label onCenter">Повторите пароль:</div>
+        <input type="password" id="repeatedPassword" class="input onCenter" th:field="*{repeatedPassword}">
+        <div class="error onCenter" th:if="${#fields.hasErrors('repeatedPassword')}" th:errors="*{repeatedPassword}"></div>
+        <div class="label onCenter">Инвалидность:</div>
+<select id="disability" class="input onCenter" th:field="*{disability}">
+    <option th:value="'0'" selected>нет инвалидности</option>
+    <option th:value="'1'">1-я степень</option>
+    <option th:value="'2'">2-я степень</option>
+    <option th:value="'3'">3-я степень</option>
+</select>
+<br>
+<br>
+        <input type="submit" class="button onCenter" onclick="deleteMaskFromPhoneInput()" value="Зарегестрироваться">
+</form>
+    <a href="/auth"><button class="button onCenter">На главную</button></a>
+    <br>
+    <br>
+</div>
+<script src="https://unpkg.com/imask"></script>
+<script>
+    const element = document.getElementById('phoneNumber');
+    const maskOptions = {
+        mask: '+{7}(000)000-00-00'
+    };
+    const mask = IMask(element, maskOptions);
+
+    function deleteMaskFromPhoneInput() {
+        var phoneInput = document.getElementById('phoneNumber')
+        var phoneValue = phoneInput.value.replace(/\D/g, '');
+        phoneInput.value = phoneValue;
+    }
+</script>
+</body>
+</html>

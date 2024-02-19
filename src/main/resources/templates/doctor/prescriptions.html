@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои назначения</title>
+</head>
+<style>
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .first-column {
+        position: fixed;
+        float: left;
+        width: 13%;
+        background-color: #6fc9fd;
+        height: 100vh;
+    }
+
+    .nav-list {
+        list-style: none;
+        text-decoration: none;
+    }
+
+    .nav-list-element {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 7px;
+        background-color: #6fc9fd;
+        border: none;
+    }
+
+    .logout-list-button {
+        position: relative;
+        font-size: 16px;
+        right: 6px;
+    }
+
+    .nav-list-element:hover {
+        font-size: 19px;
+        text-decoration: underline white;
+    }
+
+    .second-column {
+        position: relative;
+        left: 13%;
+        float: left;
+        width: 80%;
+        margin-left: 20px;
+    }
+
+    .onCenter {
+        width: max-content;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .input {
+        height: 30px;
+        background-color: #d6f0ff;
+        border-radius: 5px;
+    }
+
+    .main-font {
+        font-size: 18px;
+    }
+
+    .button {
+        height: 30px;
+        background-color: #6fc9fd;
+        border-color: #6fc9fd;
+        border-radius: 5px;
+        color: white;
+        margin-left: 10px;
+    }
+
+    .prescriptions-label-row {
+        display: table-row;
+        text-align: center;
+        width: max-content;
+    }
+
+    .prescriptions-label-cell1,.prescriptions-label-cell2,.prescriptions-label-cell3,
+    .prescriptions-label-cell4,.prescriptions-label-cell5,.prescriptions-label-cell6 {
+        border: 1px solid black;
+        height: 30px;
+        display: table-cell;
+    }
+
+    .prescriptions-label-cell1 {
+        vertical-align: middle;
+        width: 80px;
+    }
+
+    .prescriptions-label-cell2 {
+        vertical-align: middle;
+        width: 240px;
+    }
+
+    .prescriptions-label-cell3 {
+        vertical-align: middle;
+        width: 200px;
+    }
+
+    .prescriptions-label-cell4 {
+        vertical-align: middle;
+        width: 150px;
+    }
+
+    .prescriptions-label-cell5 {
+        vertical-align: middle;
+        width: 250px;
+    }
+
+    .prescriptions-label-cell6 {
+        vertical-align: middle;
+        width: 250px;
+    }
+
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        printPrescriptions();
+    });
+</script>
+<body>
+<div class="first-column">
+    <ul class="nav-list">
+        <li><a th:href="@{/doctor}" class="nav-list-element">Личный кабинет</a></li>
+        <li><a th:href="@{/doctor/prescriptions}" class="nav-list-element">Мои назначения</a></li>
+        <li>
+            <form action="/doctor/logout" method="post">
+                <input type="submit" value="Выход" class="nav-list-element logout-list-button">
+            </form>
+        </li>
+    </ul>
+</div>
+<div class="second-column">
+    <h2 class="onCenter">Мои назначения</h2>
+    <label for="phone" class="main-font">По номеру: </label>
+        <input type="tel" id="phone" class="input"
+        placeholder="+7(000)000-00-00"/>
+        <script src="https://unpkg.com/imask"></script>
+        <script>
+            const element = document.getElementById('phone');
+            const maskOptions = {
+                mask: '+{7}(000)000-00-00'
+            };
+            const mask = IMask(element, maskOptions);
+        </script>
+    <button type="button" onclick="search()" class="button">Найти</button>
+    <button type="button" onclick="cancelSearch()" class="button">Отменить поиск</button>
+    <br>
+    <br>
+    <div class="prescriptions-label-row">
+        <div class="prescriptions-label-cell1">Время</div>
+        <div class="prescriptions-label-cell2">Пациент</div>
+        <div class="prescriptions-label-cell3">Жалобы</div>
+        <div class="prescriptions-label-cell4">Диагноз</div>
+        <div class="prescriptions-label-cell5">Рекомендации</div>
+        <div class="prescriptions-label-cell6">Лекарства</div>
+    </div>
+    <div id="prescriptionsContainer"></div>
+    <script>
+        function getAuthenticationCookie() {
+            const allCookies = document.cookie;
+            const cookiesArray = allCookies.split(';').map(cookie => cookie.trim().split('='));
+            const cookiesObject = Object.fromEntries(cookiesArray);
+            return cookiesObject['Authentication'];
+        }
+
+        function printPrescriptions() {
+            const phoneInput = document.getElementById('phone');
+            canCancelSearch = phoneInput.value !== '';
+            const phoneValue = phoneInput.value.replace(/\D/g, '');
+            var prescriptionsContainer = document.getElementById('prescriptionsContainer');
+            prescriptionsContainer.innerHTML = '';
+            var prescriptionsListXHR = new XMLHttpRequest();
+            var url = '/doctorRest/getPrescriptions?phoneNumber=' + phoneValue;
+            prescriptionsListXHR.open("GET", url, true)
+            prescriptionsListXHR.setRequestHeader("Authentication", getAuthenticationCookie());
+            prescriptionsListXHR.onreadystatechange = () => {
+                if (prescriptionsListXHR.status === 200 && prescriptionsListXHR.readyState === 4) {
+                    var prescriptionsDateMap = JSON.parse(prescriptionsListXHR.responseText);
+                    dynamicBuildPrescriptions(prescriptionsDateMap)
+                }
+            }
+            prescriptionsListXHR.send();
+        }
+
+        function dynamicBuildPrescriptions(prescriptionsDateMap) {
+            for (var data in prescriptionsDateMap) {
+                var date = document.createElement('div');
+                date.innerHTML = data;
+                date.style.marginTop = '10px';
+                date.style.marginBottom = '10px';
+                date.style.fontSize = '20px';
+                prescriptionsContainer.appendChild(date);
+                var prescriptionsList = prescriptionsDateMap[data];
+                for (let i = 0; i < prescriptionsList.length; i++) {
+                    var tableRow = document.createElement('div');
+                    tableRow.style.display = 'table-row';
+                    tableRow.style.textAlign = 'center';
+                    var tableCell1 = document.createElement('div');
+                    tableCell1.style.padding = '6px  0 6px 0';
+                    tableCell1.style.verticalAlign = 'middle';
+                    tableCell1.style.width = '80px';
+                    tableCell1.style.display = 'table-cell';
+                    tableCell1.style.border = '1px solid black';
+                    tableCell1.innerHTML = prescriptionsList[i].time;
+                    var tableCell2 = document.createElement('div');
+                    tableCell2.style.padding = '6px  0 6px 0';
+                    tableCell2.style.verticalAlign = 'middle';
+                    tableCell2.style.width = '240px';
+                    tableCell2.style.display = 'table-cell';
+                    tableCell2.style.border = '1px solid black';
+                    var a = document.createElement('a');
+                    a.href = '/doctor/sick/' + prescriptionsList[i].sickID;
+                    a.innerHTML = prescriptionsList[i].sickSurname + ' ' +
+                        prescriptionsList[i].sickFirstName + ' ' +
+                        prescriptionsList[i].sickLastName;
+                    tableCell2.appendChild(a);
+                    var tableCell3 = document.createElement('div');
+                    tableCell3.style.padding = '6px  0 6px 0';
+                    tableCell3.style.verticalAlign = 'middle';
+                    tableCell3.innerHTML = prescriptionsList[i].complaints;
+                    tableCell3.style.width = '200px';
+                    tableCell3.style.display = 'table-cell';
+                    tableCell3.style.border = '1px solid black';
+                    var tableCell4 = document.createElement('div');
+                    tableCell4.style.padding = '6px  0 6px 0';
+                    tableCell4.style.verticalAlign = 'middle';
+                    tableCell4.innerHTML = prescriptionsList[i].recommendations;
+                    tableCell4.style.width = '150px';
+                    tableCell4.style.display = 'table-cell';
+                    tableCell4.style.border = '1px solid black';
+                    var tableCell5 = document.createElement('div');
+                    tableCell5.style.padding = '6px  0 6px 0';
+                    tableCell5.style.verticalAlign = 'middle';
+                    tableCell5.innerHTML = prescriptionsList[i].diagnosis;
+                    tableCell5.style.width = '250px';
+                    tableCell5.style.display = 'table-cell';
+                    tableCell5.style.border = '1px solid black';
+                    var tableCell6 = document.createElement('div');
+                    tableCell6.style.padding = '6px  0 6px 0';
+                    tableCell6.style.verticalAlign = 'middle';
+                    tableCell6.style.width = '250px';
+                    tableCell6.style.display = 'table-cell';
+                    tableCell6.style.border = '1px solid black';
+                    for (let j = 0; j < prescriptionsList[i].prescriptionsMedicamentList.length; j++) {
+                        var medicamentP = document.createElement('p');
+                        medicamentP.innerHTML = prescriptionsList[i].prescriptionsMedicamentList[j].name + ' : ' +
+                            prescriptionsList[i].prescriptionsMedicamentList[j].use;
+                        tableCell6.appendChild(medicamentP);
+                    }
+                    tableRow.appendChild(tableCell1);
+                    tableRow.appendChild(tableCell2);
+                    tableRow.appendChild(tableCell3);
+                    tableRow.appendChild(tableCell4);
+                    tableRow.appendChild(tableCell5);
+                    tableRow.appendChild(tableCell6);
+                    prescriptionsContainer.appendChild(tableRow);
+                }
+            }
+        }
+
+        var canCancelSearch = false;
+        function search() {
+            if (document.getElementById('phone').value !== '') {
+                printPrescriptions()
+            }
+        }
+
+        function cancelSearch() {
+            var phoneInput = document.getElementById('phone');
+            if (canCancelSearch) {
+                phoneInput.value = '';
+                printPrescriptions();
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

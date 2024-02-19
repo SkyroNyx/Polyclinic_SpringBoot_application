@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мой аккаунт</title>
+</head>
+<style>
+
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .first-column {
+        position: fixed;
+        float: left;
+        width: 13%;
+        background-color: #6fc9fd;
+        height: 100vh;
+    }
+
+    .nav-list {
+        list-style: none;
+        text-decoration: none;
+    }
+
+    .nav-list-element {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 7px;
+        background-color: #6fc9fd;
+        border: none;
+    }
+
+    .logout-list-button {
+        position: relative;
+        font-size: 16px;
+        right: 6px;
+    }
+
+    .nav-list-element:hover {
+        font-size: 19px;
+        text-decoration: underline white;
+    }
+
+    .main-font {
+        font-size: 18px;
+    }
+
+    .second-column {
+        position: relative;
+        left: 13%;
+        float: left;
+        width: 60%;
+    }
+
+    .onCenter {
+        width: max-content;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .profile {
+        width: 80%;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: rgba(252, 252, 252);
+        border: 1px solid rgba(126, 125, 125);
+        border-radius: 10px;
+    }
+
+    .space {
+        height: 5px;
+    }
+
+    .fields {
+        font-size: 17px;
+        display: inline-block;
+        position: relative;
+        margin-left: 20px;
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .values {
+        font-size: 17px;
+        display: inline-block;
+        margin-left: 20px;
+    }
+
+    .profile-button,.button {
+        height: 30px;
+        background-color: #6fc9fd;
+        border-color: #6fc9fd;
+        border-radius: 5px;
+        color: white;
+
+    }
+
+    .profile-button {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .onCenter {
+        width: max-content;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .date-block {
+        width: max-content;
+        position: relative;
+        left: 24%;
+        transform: translateX(-50%);
+    }
+
+    .date {
+        color: black;
+        font-family: Arial, sans-serif;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: #d6f0ff;
+    }
+
+    .date:hover {
+        color: #ffffff; /* Изменить цвет при наведении */
+        background-color: #6fc9fd; /* Изменить фон при наведении */
+    }
+
+    .appointments {
+        margin-left: 100px;
+        width: 100%;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        border-radius: 10px;
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        printAppointmentsByDate();
+    });
+
+    window.addEventListener('beforeunload', function() {
+        setDateCookie()
+    });
+</script>
+<body>
+
+
+<div id="hidden-objects" hidden="hidden">
+    <form th:action="@{/doctor/cancelAppointment}" th:method="delete"
+          hidden="hidden" id="cancelAppointmentForm">
+        <input type="text" id="appointmentIdCancel" name="appointmentId">
+    </form>
+
+    <form th:action="@{/doctor/rescheduleAppointment}" th:method="get"
+          id="rescheduleAppointmentForm">
+        <input type="text" id="appointmentIdReschedule" name="appointmentId">
+    </form>
+
+    <form th:action="@{/doctor/createPrescription}" th:method="get"
+          id="createPrescriptionForm">
+        <input type="text" id="appointmentIdPrescription" name="appointmentId">
+    </form>
+</div>
+
+<div  class="first-column">
+    <ul class="nav-list">
+        <li><a th:href="@{/doctor}" class="nav-list-element">Личный кабинет</a></li>
+        <li><a th:href="@{/doctor/prescriptions}" class="nav-list-element">Мои назначения</a></li>
+        <li>
+            <form action="/doctor/logout" method="post">
+                <input type="submit" value="Выход" class="nav-list-element logout-list-button">
+            </form>
+        </li>
+    </ul>
+</div>
+<div class="second-column">
+    <h2 class="onCenter">Мой профиль</h2>
+    <div class="profile">
+        <div class="fields">
+            ФИО:
+            <div class="space"></div>
+            Специализация:
+            <div class="space"></div>
+            Категория:
+            <div class="space"></div>
+            Стаж (часов):
+            <div class="space"></div>
+            Рейтинг:
+            <div class="space"></div>
+        </div>
+        <div class="values" >
+            <div th:text="${doctor.getSurname() + ' ' + doctor.getFirstName() + ' ' + doctor.getLastName()}"></div>
+            <div class="space"></div>
+            <div th:text="${doctor.getSpecialization()}"></div>
+            <div class="space"></div>
+            <div th:text="${doctor.getCategory()}"></div>
+            <div class="space"></div>
+            <div th:text="${doctor.getExperience()}"></div>
+            <div class="space"></div>
+            <div th:text="${doctor.getRating()} + '/10'"></div>
+            <div class="space"></div>
+        </div>
+    </div>
+    <br>
+    <a th:href="@{/doctor/prescriptions}" ><button class="profile-button">Мои назначения</button></a>
+    <br>
+    <br>
+    <h2 class="onCenter">Мои записи</h2>
+    <div class="date-block">
+        <label for="date" class="main-font">Ваши записи на </label>
+        <input type="date" id="date" name="date" th:value="${currentDate}" th:max="${maxDate}"
+               onchange="printAppointmentsByDate()" class="date">
+    </div>
+    <script>
+        function setDateCookie() {
+            document.cookie = "peekedDateInPersonalAccount=" + document.getElementById('date').value + "; path=/";
+        }
+    </script>
+    <br>
+    <div id="appointmentsContainer" class="appointments"></div>
+        <script>
+            function getAuthenticationCookie() {
+                const allCookies = document.cookie;
+                const cookiesArray = allCookies.split(';').map(cookie => cookie.trim().split('='));
+                const cookiesObject = Object.fromEntries(cookiesArray);
+                return cookiesObject['Authentication'];
+            }
+
+            function printAppointmentsByDate() {
+                var appointmentsContainer = document.getElementById('appointmentsContainer');
+                appointmentsContainer.innerHTML = '';
+                if (dayIsWeekend()) {
+                    appointmentsContainer.innerHTML = 'суббота и воскресенье - выходные дни';
+                }
+                else {
+                    var date = document.getElementById('date').value;
+                    var appointmentsListXHR = new XMLHttpRequest();
+                    appointmentsListXHR.open("GET", "/doctorRest/getAppointmentsByDate?date=" + date, true);
+                    appointmentsListXHR.setRequestHeader("Authentication", getAuthenticationCookie());
+                    appointmentsListXHR.onreadystatechange = function () {
+                        if (appointmentsListXHR.readyState === 4 && appointmentsListXHR.status === 200) {
+                            var nearestFreeDateXHR = new XMLHttpRequest();
+                            nearestFreeDateXHR.open("GET", "/doctorRest/getNearestFreeDate", true);
+                            nearestFreeDateXHR.setRequestHeader("Authentication", getAuthenticationCookie());
+                            nearestFreeDateXHR.onreadystatechange = () => {
+                                if (nearestFreeDateXHR.readyState === 4) {
+                                    var appointmentsList = JSON.parse(appointmentsListXHR.responseText);
+                                    if (appointmentsList.length > 0) {
+                                        var buildRescheduleButton = nearestFreeDateXHR.status !== 404;
+                                        dynamicBuildAppointments(appointmentsContainer, appointmentsList, buildRescheduleButton);
+                                    } else {
+                                        appointmentsContainer.innerHTML = 'у вас нет записей на этот день';
+                                    }
+                                }
+                            }
+                            nearestFreeDateXHR.send();
+                        }
+                    }
+                    appointmentsListXHR.send();
+                }
+            }
+            function dynamicBuildAppointments(appointmentsContainer, appointmentsList, buildRescheduleButton) {
+                    var labelDiv = document.createElement('div');
+                    labelDiv.style.marginLeft = '28px';
+                    var labelRow = document.createElement('div');
+                    labelRow.style.textAlign = 'center';
+                    labelRow.style.display = 'table-row';
+                    var labelCell1 = document.createElement('div');
+                    labelCell1.style.padding = '6px  0 6px 0';
+                    labelCell1.style.display = 'table-cell';
+                    labelCell1.style.border = '1px solid black';
+                    labelCell1.style.verticalAlign = 'middle';
+                    labelCell1.innerHTML = 'Время';
+                    labelCell1.style.width = '80px';
+                    labelCell1.style.marginLeft = '26px';
+                    var labelCell2 = document.createElement('div');
+                    labelCell2.style.padding = '6px  0 6px 0';
+                    labelCell2.style.display = 'table-cell';
+                    labelCell2.style.border = '1px solid black';
+                    labelCell2.style.verticalAlign = 'middle';
+                    labelCell2.innerHTML = 'Пациент';
+                    labelCell2.style.width = '250px';
+                    var labelCell3 = document.createElement('div');
+                    labelCell3.style.padding = '6px  0 6px 0';
+                    labelCell3.style.display = 'table-cell';
+                    labelCell3.style.border = '1px solid black';
+                    labelCell3.style.verticalAlign = 'middle';
+                    labelCell3.innerHTML = 'Жалобы';
+                    labelCell3.style.width = '250px';
+                    var labelCell4 = document.createElement('div');
+                    labelCell4.style.padding = '6px  0 6px 0';
+                    labelCell4.style.display = 'table-cell';
+                    labelCell4.style.border = '1px solid black';
+                    labelCell4.style.verticalAlign = 'middle';
+                    labelCell4.innerHTML = 'Документы';
+                    labelCell4.style.width = '200px';
+                    labelRow.appendChild(labelCell1);
+                    labelRow.appendChild(labelCell2);
+                    labelRow.appendChild(labelCell3);
+                    labelRow.appendChild(labelCell4);
+                    labelDiv.appendChild(labelRow);
+                    appointmentsContainer.appendChild(labelDiv);
+                    for (let i = 0; i < appointmentsList.length; i++) {
+                        var appointmentDiv = document.createElement('div');
+                        var accordionButtonImg = document.createElement('div');
+                        accordionButtonImg.id = 'abi' + i;
+                        accordionButtonImg.style.width = '0';
+                        accordionButtonImg.style.height = '0';
+                        accordionButtonImg.style.borderTop = '10px solid transparent';
+                        accordionButtonImg.style.borderBottom = '10px solid transparent';
+                        accordionButtonImg.style.borderRight = '10px solid #000';
+                        accordionButtonImg.style.transform = 'rotate(-180deg)';
+                        var accordionButton = document.createElement('button');
+                        accordionButton.id = 'accordionButton' + i;
+                        accordionButton.style.marginTop = '2px';
+                        accordionButton.style.width = '26px';
+                        accordionButton.style.height = '26px';
+                        accordionButton.style.marginRight = '2px';
+                        accordionButton.style.cursor = 'pointer';
+                        var row = document.createElement('div');
+                        row.style.textAlign = 'center';
+                        row.style.display = 'table-row';
+                        var cell1 = document.createElement('div');
+                        cell1.style.padding = '6px  0 6px 0';
+                        cell1.style.display = 'table-cell';
+                        cell1.style.border = '1px solid black';
+                        cell1.style.verticalAlign = 'middle';
+                        cell1.innerHTML = appointmentsList[i].time;
+                        cell1.style.width = '80px';
+                        cell1.style.marginLeft = '26px';
+                        var cell2 = document.createElement('div');
+                        cell2.style.padding = '6px  0 6px 0';
+                        cell2.style.display = 'table-cell';
+                        cell2.style.border = '1px solid black';
+                        cell2.style.verticalAlign = 'middle';
+                        cell2.style.width = '250px';
+                        var a = document.createElement('a');
+                        a.href = '/doctor/sick/' + appointmentsList[i].sickID;
+                        a.innerHTML = appointmentsList[i].sickSurname + ' ' +
+                            appointmentsList[i].sickFirstName + ' ' +
+                            appointmentsList[i].sickLastName;
+                        cell2.appendChild(a);
+                        var cell3 = document.createElement('div');
+                        cell3.style.padding = '6px  0 6px 0';
+                        cell3.style.display = 'table-cell';
+                        cell3.style.border = '1px solid black';
+                        cell3.style.verticalAlign = 'middle';
+                        cell3.innerHTML = appointmentsList[i].complaints;
+                        cell3.style.width = '250px';
+                        var cell4 = document.createElement('div');
+                        cell4.style.padding = '6px  0 6px 0';
+                        cell4.style.display = 'table-cell';
+                        cell4.style.border = '1px solid black';
+                        cell4.style.verticalAlign = 'middle';
+                        cell4.style.width = '200px';
+                        for (let j = 0; j < appointmentsList[i].documentsList.length; j++) {
+                            var a = document.createElement('a');
+                            a.innerHTML = appointmentsList[i].documentsList[j].name;
+                            a.href = '#';
+                            a.addEventListener('click', function(event) {
+                                event.preventDefault();
+                                const fileIdValue = appointmentsList[i].documentsList[j].id;
+                                var downloadFileXHR = new XMLHttpRequest();
+                                downloadFileXHR.open("GET", "/doctorRest/downloadFile?fileId=" + fileIdValue, true);
+                                downloadFileXHR.setRequestHeader("Authentication", getAuthenticationCookie());
+                                downloadFileXHR.responseType = "blob";
+                                downloadFileXHR.onload = function () {
+                                    if (downloadFileXHR.status === 200) {
+                                        const blob = downloadFileXHR.response;
+                                        const link = document.createElement('a');
+                                        link.href = window.URL.createObjectURL(blob);
+                                        const contentDispositionHeader = downloadFileXHR.getResponseHeader('Content-Disposition');
+                                        const filenameMatch = contentDispositionHeader.match(/filename="(.+)"/);
+                                        link.download = filenameMatch ? decodeURIComponent(filenameMatch[1]) : 'download';
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        document.body.removeChild(link);
+                                    } else {
+                                        console.error('HTTP error! Status:', downloadFileXHR.status);
+                                    }
+                                };
+                                downloadFileXHR.send();
+                            });
+                            cell4.appendChild(a);
+                            if (j !== appointmentsList[i].documentsList.length - 1) {
+                                var split = document.createElement('div')
+                                split.textContent = ",  ";
+                                split.style.display = 'inline'
+                                cell4.appendChild(split);
+                            }
+                        }
+                        var accordionContent = document.createElement('div');
+                        accordionContent.hidden = true;
+                        accordionContent.id = 'accordionContent' + i;
+                        accordionContent.style.backgroundColor = 'white';
+                        accordionContent.style.border = '1px solid rgb(150,150,150)';
+                        accordionContent.style.marginLeft = '28px';
+                        accordionContent.style.padding = '6px  0 6px 0';
+                        accordionContent.style.width = '785px';
+                        var createPrescriptionButton = document.createElement('button');
+                        createPrescriptionButton.style.marginLeft = '10px';
+                        createPrescriptionButton.innerHTML = 'Назначить лечение';
+                        createPrescriptionButton.addEventListener('click',
+                            () => {createPrescription(appointmentsList[i].id)})
+                        createPrescriptionButton.style.color = 'white';
+                        createPrescriptionButton.style.backgroundColor = '#6fc9fd';
+                        createPrescriptionButton.style.borderColor = '#6fc9fd';
+                        createPrescriptionButton.style.borderRadius = '5px';
+                        createPrescriptionButton.style.height = '30px';
+
+                        var cancelAppointmentButton = document.createElement('button');
+                        cancelAppointmentButton.style.marginLeft = '10px';
+                        cancelAppointmentButton.innerHTML = 'Отменить прием';
+                        cancelAppointmentButton.addEventListener('click',
+                            () => {showModal(appointmentsList[i].id)})
+                        cancelAppointmentButton.style.color = 'white';
+                        cancelAppointmentButton.style.backgroundColor = '#6fc9fd';
+                        cancelAppointmentButton.style.borderColor = '#6fc9fd';
+                        cancelAppointmentButton.style.borderRadius = '5px';
+                        cancelAppointmentButton.style.height = '30px';
+                        accordionButton.appendChild(accordionButtonImg);
+                        row.appendChild(accordionButton);
+                        row.appendChild(cell1);
+                        row.appendChild(cell2);
+                        row.appendChild(cell3);
+                        row.appendChild(cell4);
+                        appointmentDiv.appendChild(row);
+                        accordionContent.appendChild(createPrescriptionButton);
+                        if (buildRescheduleButton) {
+                            var rescheduleAppointmentButton = document.createElement('button');
+                            rescheduleAppointmentButton.style.marginLeft = '10px';
+                            rescheduleAppointmentButton.innerHTML = 'Перенести прием';
+                            rescheduleAppointmentButton.addEventListener('click',
+                                () => {rescheduleAppointment(appointmentsList[i].id)});
+                            rescheduleAppointmentButton.style.color = 'white';
+                            rescheduleAppointmentButton.style.backgroundColor = '#6fc9fd';
+                            rescheduleAppointmentButton.style.borderColor = '#6fc9fd';
+                            rescheduleAppointmentButton.style.borderRadius = '5px';
+                            rescheduleAppointmentButton.style.height = '30px';
+                            accordionContent.appendChild(rescheduleAppointmentButton);
+                        }
+
+
+                        accordionContent.appendChild(cancelAppointmentButton);
+                        appointmentDiv.appendChild(accordionContent);
+                        appointmentsContainer.appendChild(appointmentDiv);
+
+
+                        document.getElementById('accordionButton' + i).addEventListener('click', () => {
+                            if (!document.getElementById('accordionContent' + i).hidden) {
+                                document.getElementById('accordionContent' + i).hidden = true;
+                            } else {
+                                document.getElementById('accordionContent' + i).hidden = false;
+                            }
+                            if (document.getElementById('abi' + i).style.transform === 'rotate(-90deg)') {
+                                document.getElementById('abi' + i).style.transform = 'rotate(-180deg)'
+                            }
+                            else {
+                                document.getElementById('abi' + i).style.transform = 'rotate(-90deg)';
+                            }
+                        });
+                    }
+            }
+            function dayIsWeekend() {
+                const selectedDate = new Date(document.getElementById("date").value);
+                const dayOfWeek = selectedDate.getDay();
+                return dayOfWeek === 0 || dayOfWeek === 6;
+            }
+        </script>
+</div>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <input type="text" id="appointmentId" hidden="hidden">
+        <h2>Подтверждение отправки</h2>
+        <p>Вы действительно хотите отменить прием?</p>
+        <button onclick="cancelAppointment(document.getElementById('appointmentId').value)" class="button">Да</button>
+        <button onclick="hideModal();" class="button">Нет</button>
+    </div>
+</div>
+
+<script>
+    function createPrescription(appointmentId) {
+        document.getElementById("appointmentIdPrescription").value = appointmentId
+        document.getElementById("createPrescriptionForm").submit();
+    }
+    function rescheduleAppointment(appointmentId) {
+        document.getElementById("appointmentIdReschedule").value = appointmentId
+        document.getElementById("rescheduleAppointmentForm").submit();
+    }
+    function cancelAppointment(appointmentId) {
+        document.getElementById("appointmentIdCancel").value = appointmentId
+        document.getElementById("cancelAppointmentForm").submit();
+    }
+    function showModal(appointmentId) {
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("appointmentId").value = appointmentId;
+    }
+    function hideModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+</script>
+</body>
+</html>

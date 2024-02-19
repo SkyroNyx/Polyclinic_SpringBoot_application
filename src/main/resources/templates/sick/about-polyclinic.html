@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/templates/img/icon.jpg" type="image/jpg">
+    <title>О поликлинике</title>
+</head>
+<style>
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .first-column {
+        float: left;
+        width: 13%;
+        background-color: #6fc9fd;
+        height: 100vh;
+    }
+
+    .logo-img {
+        height: 40px;
+        width: 40px;
+        margin-top: 6px;
+        margin-bottom: 4px;
+    }
+
+    .nav-list {
+        margin-top: 0;
+        list-style: none;
+        text-decoration: none;
+    }
+
+    .nav-list-element {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 7px;
+        background-color: #6fc9fd;
+        border: none;
+    }
+
+    .logout-list-button {
+        position: relative;
+        font-size: 16px;
+        right: 6px;
+    }
+
+    .nav-list-element:hover {
+        font-size: 19px;
+        text-decoration: underline white;
+    }
+
+    .second-column {
+        float: left;
+        width: 40%;
+        margin-left: 50px;
+    }
+
+    .onCenter {
+        width: max-content;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .main-font {
+        font-size: 18px;
+    }
+
+</style>
+<body>
+<div class="first-column">
+    <img src="/templates/img/logo.jpg" alt="logo" class="logo-img onCenter">
+    <ul class="nav-list">
+        <li><a th:href="@{/sick}" class="nav-list-element" >Личный кабинет</a></li>
+        <li><a th:href="@{/sick/doctors}" class="nav-list-element">Список докторов</a></li>
+        <li><a th:href="@{/sick/prescriptions}" class="nav-list-element">Мои назначения</a></li>
+        <li><a th:href="@{/sick/about-polyclinic}" class="nav-list-element">О поликлинике</a></li>
+        <li>
+            <form action="/sick/logout" method="post">
+                <input type="submit" value="Выход" class="nav-list-element logout-list-button">
+            </form>
+        </li>
+    </ul>
+</div>
+<div class="second-column">
+    <h2 class="onCenter">Добро пожаловать в нашу поликлинику!</h2>
+    <p class="main-font">
+        Мы предоставляем широкий спектр медицинских услуг для всех категорий населения. Наша миссия - обеспечить максимально возможный уровень медицинского обслуживания с использованием современных технологий и высококвалифицированных специалистов.
+        <br>
+        Мы предлагаем услуги таких направлений, как терапия, неврология, офтальмология, гинекология, урология, дерматология и др. Кроме того, мы осуществляем диагностику и лечение пациентов с острыми и хроническими заболеваниями.
+        <br>
+        Наша команда состоит из квалифицированных врачей и медицинских работников, которые готовы оказать помощь в любой ситуации. Любой специалист нашей клиники обладает высшим медицинским образованием и проходил обязательную сертификацию, что гарантирует высокое качество и профессионализм предоставляемых услуг.
+        <br>
+        В клинике мы используем современные методики и оборудование, которые позволяют своевременно обнаруживать и лечить заболевания. Мы строго соблюдаем правила санитарно-эпидемиологической безопасности, что обеспечивает надежность и безопасность при оказании медицинских услуг.
+        <br>
+        Наша клиника заботится о здоровье каждого пациента и предоставляет профессиональную медицинскую помощь в самых различных областях медицины. Мы сделаем все возможное, чтобы ваше здоровье оставалось под надежной защитой.
+    </p>
+    <br>
+</div>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${doctor.getSurname() + ' ' + doctor.getFirstName() + ' ' + doctor.getLastName()}"></title>
+</head>
+<style>
+
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .first-column {
+        float: left;
+        width: 13%;
+        background-color: #6fc9fd;
+        height: 100vh;
+    }
+
+    .nav-list {
+        list-style: none;
+        text-decoration: none;
+    }
+
+    .nav-list-element {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 7px;
+        background-color: #6fc9fd;
+        border: none;
+    }
+
+    .logout-list-button {
+        position: relative;
+        font-size: 16px;
+        right: 6px;
+    }
+
+    .nav-list-element:hover {
+        font-size: 19px;
+        text-decoration: underline white;
+    }
+
+    .second-column {
+        float: left;
+        width: 40%;
+    }
+
+    .onCenter {
+        width: max-content;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .profile {
+        width: 80%;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: rgba(252, 252, 252);
+        border: 1px solid rgba(126, 125, 125);
+        border-radius: 10px;
+    }
+
+    .space {
+        height: 5px;
+    }
+
+    .fields {
+        font-size: 17px;
+        display: inline-block;
+        position: relative;
+        margin-left: 20px;
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .values {
+        font-size: 17px;
+        display: inline-block;
+        margin-left: 20px;
+    }
+
+    .main-font {
+        font-size: 18px;
+    }
+
+    .third-column {
+        float: left;
+        width: 20%;
+        text-align: center;
+    }
+
+    .button {
+        height: 30px;
+        background-color: #6fc9fd;
+        border-color: #6fc9fd;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .input,.big-input {
+        height: 30px;
+        background-color: #d6f0ff;
+        border-radius: 5px;
+    }
+
+    .input {
+        text-align: center;
+    }
+
+    .big-input {
+        height: 100px;
+        width: 300px;
+        border-color: black;
+    }
+
+    .date {
+        color: black;
+        font-family: Arial, sans-serif;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: #d6f0ff;
+    }
+
+    .date:hover {
+        color: #ffffff; /* Изменить цвет при наведении */
+        background-color: #6fc9fd; /* Изменить фон при наведении */
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+
+    }
+
+    .modal-content {
+        border-radius: 10px;
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .error {
+        margin-top: 5px;
+        padding: 3px;
+        height: auto;
+        width: 230px;
+        background-color: #ffd993;
+        color: brown;
+        border: 1px solid #a66969;
+        border-radius: 5px;
+        text-align: center;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        configureMakingAppointmentBlock();
+    })
+    window.addEventListener('beforeunload', function() {
+        setDataCookie()
+    });
+    function setDataCookie() {
+        var doctorId = document.getElementById('doctorId').value;
+        document.cookie = "doctorId" + doctorId +
+            "date=" + document.getElementById('appointment-date').value + "; path=/";
+
+        document.cookie = "doctorId" + doctorId +
+            "complaints=" + document.getElementById('appointment-complaints').value + "; path=/";
+    }
+</script>
+<body>
+<input hidden="hidden" type="text" th:value="${doctor.getId()}" id="doctorId">
+<div class="first-column">
+    <ul class="nav-list">
+        <li><a th:href="@{/sick}" class="nav-list-element">Личный кабинет</a></li>
+        <li><a th:href="@{/sick/doctors}" class="nav-list-element">Список докторов</a></li>
+        <li><a th:href="@{/sick/prescriptions}" class="nav-list-element">Мои назначения</a></li>
+        <li><a th:href="@{/sick/about-polyclinic}" class="nav-list-element">О поликлинике</a></li>
+        <li>
+            <form action="/sick/logout" method="post">
+                <input type="submit" value="Выход" class="nav-list-element logout-list-button">
+            </form>
+        </li>
+    </ul>
+</div>
+<div class="second-column">
+    <h2 class="onCenter">Профиль врача</h2>
+    <div class="profile">
+        <div class="fields">
+            ФИО:
+            <div class="space"></div>
+            Специализация:
+            <div class="space"></div>
+            Категория:
+            <div class="space"></div>
+            Стаж (часов):
+            <div class="space"></div>
+            Рейтинг:
+            <div class="space"></div>
+            Номер телефона:
+            <div class="space"></div>
+        </div>
+        <div class="values" >
+            <div th:text="${doctor.getSurname() + ' ' + doctor.getFirstName() + ' ' + doctor.getLastName()}"></div>
+            <div class="space"></div>
+            <div th:text="${doctor.getSpecialization()}"></div>
+            <div class="space"></div>
+            <div th:text="${doctor.getCategory()}"></div>
+            <div class="space"></div>
+            <div th:text="${doctor.getExperience()}"></div>
+            <div class="space"></div>
+            <div th:text="${doctor.getRating()} + '/10'"></div>
+            <div class="space"></div>
+            <div th:text="${doctor.getPhoneNumber()}"></div>
+            <div class="space"></div>
+        </div>
+    </div>
+</div>
+<div class="third-column">
+    <h2>Запись на прием</h2>
+    <p th:if="${haveAnAppointment}" th:text="'вы записаны к этому доктору на ' + ${dateOfAppointment} + ' ' + ${timeOfAppointment}"></p>
+    <form th:if="${!haveAnAppointment && haveFreeDates}"
+          th:action="@{/sick/doctor/{doctorId}/makeAnAppointment
+          (doctorId=${doctor.getId()})}" th:method="POST" id="createAppointmentForm"
+          enctype="multipart/form-data">
+        <label for="appointment-date" class="main-font">Выберите дату:</label>
+        <input type="date" id="appointment-date" name="appointment-date" th:value="${currentDate}"
+               th:min="${minDate}" th:max="${maxDate}" onchange="configureMakingAppointmentBlock();" class="date">
+        <br>
+        <br>
+        <div id="appointment-block">
+            <label for="appointment-time" class="main-font">Выберите время:</label>
+            <select id="appointment-time" name="appointment-time" class="input" >
+            </select>
+            <br>
+            <br>
+            <label for="appointment-complaints" class="main-font">Жалобы (не обязательно): </label>
+            <br>
+            <textarea name="appointment-complaints" id="appointment-complaints" maxlength="255"
+                      class="big-input" th:text="${complaints}"></textarea>
+            <br>
+            <br>
+            <label for="appointment-documents" class="main-font">Медецинские документы<br>(не обязательно):</label>
+            <br>
+            <br>
+            <input type="file" id="appointment-documents" name="appointment-documents" multiple>
+            <div class="error onCenter" th:if="${customBindingResult.hasErrors()}" th:text="${customBindingResult.getErrorByField('files')}"></div>
+            <br>
+            <br>
+            <button type="button" onclick="showConfirmModal()" class="button">записаться</button>
+        </div>
+        <div id="description-block"></div>
+    </form>
+
+
+    <div th:if="${!haveAnAppointment && !haveFreeDates}">
+        <p class="main-font">К сожалению, все дни у этого доктора заняты</p>
+    </div>
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <input type="text" id="modalId" hidden="hidden">
+            <h2>Подтверждение отправки</h2>
+            <p id="modal-question"></p>
+            <button onclick="sendData()" class="button">Да</button>
+            <button onclick="hideConfirmModal();" class="button">Нет</button>
+        </div>
+    </div>
+
+    <div id="choise-modal" class="modal">
+        <div class="modal-content">
+            <h2>Приносим свои извенения</h2>
+            <p>Уже есть запись на эти дату и время<br>Пожалуйста, выберите действие</p>
+            <button onclick="goToMainPage();" class="button">Страница выбора врачей</button>
+            <button onclick="updatePage();" class="button">Обновить и остаться</button>
+        </div>
+    </div>
+    <script>
+
+        function getAuthenticationCookie() {
+            const allCookies = document.cookie;
+            const cookiesArray = allCookies.split(';').map(cookie => cookie.trim().split('='));
+            const cookiesObject = Object.fromEntries(cookiesArray);
+            return cookiesObject['Authentication'];
+        }
+
+        function appointmentsDayIsWeekend() {
+            const datepicker = document.getElementById("appointment-date");
+            const selectedDate = new Date(datepicker.value);
+            const dayOfWeek = selectedDate.getDay();
+            return dayOfWeek === 0 || dayOfWeek === 6;
+        }
+
+        function uploadFreeTimesList() {
+            var makingAppointmentBlock = document.getElementById('appointment-block');
+            var descriptionBlock = document.getElementById('description-block');
+            var selectedDate = document.getElementById("appointment-date").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/sickRest/getDoctorsFreeTimesListByDate?date=" + selectedDate
+                + "&doctorId=" + document.getElementById("doctorId").value, true);
+            xhr.setRequestHeader("Authentication", getAuthenticationCookie())
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var freeTimesList = JSON.parse(xhr.responseText);
+                        if (freeTimesList.length === 0) {
+                            makingAppointmentBlock.hidden = true;
+                            descriptionBlock.innerHTML = 'у врача нет свободного времени на эту дату';
+                        } else {
+                            makingAppointmentBlock.hidden = false;
+                            descriptionBlock.innerHTML = '';
+                            var selectTimeElement = document.getElementById("appointment-time");
+                            while (selectTimeElement.options.length > 0) {
+                                selectTimeElement.remove(0);
+                            }
+                            for (let i = 0; i < freeTimesList.length; i++) {
+                                var optionElement = document.createElement("option");
+                                optionElement.value = freeTimesList[i];
+                                optionElement.text = freeTimesList[i];
+                                selectTimeElement.add(optionElement);
+                            }
+                        }
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        function configureMakingAppointmentBlock() {
+            var makingAppointmentBlock = document.getElementById('appointment-block');
+            var descriptionBlock = document.getElementById('description-block');
+            if (appointmentsDayIsWeekend()) {
+                makingAppointmentBlock.hidden = true;
+                descriptionBlock.innerHTML = 'суббота и воскресенье - выходные дни';
+            }
+            else {
+                uploadFreeTimesList();
+            }
+        }
+
+        function dateAndTime() {
+            var date = new Date(document.getElementById("appointment-date").value);
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            if (day < 10) {
+                day = '0' + day;
+            }
+            if (month < 10) {
+                month = '0' + month;
+            }
+            return day + '-' + month + '-' + year + ' ' +
+                document.getElementById("appointment-time").value;
+        }
+
+        function showConfirmModal() {
+            document.getElementById("modal-question").textContent =
+                'записаться к врачу на ' + dateAndTime() + '?';
+            document.getElementById("confirm-modal").style.display = "block";
+        }
+
+        function hideConfirmModal() {
+            document.getElementById("confirm-modal").style.display = "none";
+        }
+
+        function sendData() {
+            var xhr = new XMLHttpRequest();
+            var params = "date=" + document.getElementById('appointment-date').value +
+                "&time=" + document.getElementById('appointment-time').value
+                + "&doctorId=" + document.getElementById('doctorId').value;
+            xhr.open("GET", "/sickRest/doctorAlreadyHaveAppointmentInDateAndTime?" + params, true);
+            xhr.setRequestHeader("Authentication", getAuthenticationCookie());
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    if (xhr.responseText === 'true') {
+                        document.getElementById('confirm-modal').style.display = 'none';
+                        document.getElementById('choise-modal').style.display = 'block';
+                    }
+                    else {
+                        document.getElementById("createAppointmentForm").submit();
+                    }
+                }
+            }
+            xhr.send();
+        }
+
+        function updatePage() {
+            location.reload();
+        }
+
+        function goToMainPage() {
+            location.href = "/sick/doctors";
+        }
+    </script>
+</div>
+</body>
+</html>

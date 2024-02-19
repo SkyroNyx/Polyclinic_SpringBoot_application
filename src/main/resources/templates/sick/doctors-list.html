@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Врачи</title>
+</head>
+<style>
+
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .first-column {
+        position: fixed;
+        float: left;
+        width: 13%;
+        background-color: #6fc9fd;
+        height: 100vh;
+    }
+
+    .nav-list {
+        list-style: none;
+        text-decoration: none;
+    }
+
+    .nav-list-element {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 7px;
+        background-color: #6fc9fd;
+        border: none;
+    }
+
+    .logout-list-button {
+        position: relative;
+        font-size: 16px;
+        right: 6px;
+    }
+
+    .nav-list-element:hover {
+        font-size: 19px;
+        text-decoration: underline white;
+    }
+
+    .second-column {
+        left: 13%;
+        position: fixed;
+        float: left;
+        width: 15%;
+        margin-left: 50px;
+    }
+
+    .input {
+        width: 50px;
+        height: 30px;
+        background-color: #d6f0ff;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .button {
+        height: 30px;
+        background-color: #6fc9fd;
+        border-color: #6fc9fd;
+        border-radius: 5px;
+        color: white;
+    }
+
+    .main-font {
+        font-size: 18px;
+    }
+
+    .third-column {
+        position: relative;
+        left: 30%;
+        float: left;
+        width: 45%;
+    }
+
+    .third-column-content {
+        background-color: white;
+        border: 1px solid #969696;
+        border-radius: 10px;
+    }
+
+    .onCenter {
+        width: max-content;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .doctorsList {
+        width: 80%;
+        position: relative;
+        left: 47%;
+        transform: translateX(-50%);
+    }
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        printDoctors();
+    });
+</script>
+<body>
+    <div class="first-column">
+        <ul class="nav-list">
+            <li><a th:href="@{/sick}" class="nav-list-element">Личный кабинет</a></li>
+            <li><a th:href="@{/sick/doctors}" class="nav-list-element">Список докторов</a></li>
+            <li><a th:href="@{/sick/prescriptions}" class="nav-list-element">Мои назначения</a></li>
+            <li><a th:href="@{/sick/about-polyclinic}" class="nav-list-element">О поликлинике</a></li>
+            <li>
+                <form action="/sick/logout" method="post">
+                    <input type="submit" value="Выход" class="nav-list-element logout-list-button">
+                </form>
+            </li>
+        </ul>
+    </div>
+    <div class="second-column">
+        <br><br>
+        <div onchange="printDoctors()" class="filters">
+            <p class="main-font">Специализация: </p>
+            <label>
+                <input type="checkbox" name="specialisations" value="Невролог">
+                невролог
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="specialisations" value="Эндокринолог" >
+                эндокринолог
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="specialisations" value="Пульмонолог" >
+                пульмонолог
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="specialisations" value="Терапевт" >
+                терапевт
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="specialisations" value="Педиатр" >
+                педиатр
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="specialisations" value="Окулист" >
+                окулист
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="specialisations" value="Кардиолог" >
+                кардиолог
+            </label>
+            <p class="main-font">Категория: </p>
+            <label>
+                <input type="checkbox" name="categories" value="высшая" >
+                высшая
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="categories" value="первая" >
+                первая
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" name="categories" value="вторая">
+                вторая
+            </label>
+            <p class="main-font">Стаж:</p>
+            <label>
+                <input type="radio" name="experience" value=">" id="more" checked>
+                больше
+            </label>
+            <label>
+                <input type="radio" name="experience" value="<" id="less">
+                меньше
+            </label>
+            <br>
+            <br>
+            <input type="number" name="number" value="0" id="experienceNumber" oninput="printDoctors()" class="input">
+        </div>
+        <br>
+        <button type="button" onclick="cancelFilters()" class="button">Сбросить фильтры</button>
+    </div>
+    <div class="third-column">
+        <h2 class="onCenter">Список врачей</h2>
+        <div class="third-column-content">
+            <div id="doctorsListContainer" class="doctorsList"></div>
+            <script>
+                function getAuthenticationCookie() {
+                    const allCookies = document.cookie;
+                    const cookiesArray = allCookies.split(';').map(cookie => cookie.trim().split('='));
+                    const cookiesObject = Object.fromEntries(cookiesArray);
+                    return cookiesObject['Authentication'];
+                }
+                function cancelFilters() {
+                    var checkedBoxes = document.querySelectorAll('.filters input[type="checkbox"]:checked');
+                    checkedBoxes.forEach(function (checkbox) {
+                        checkbox.checked = false;
+                    })
+                    var moreRadio = document.getElementById('more')
+                    if (!moreRadio.checked) {
+                        moreRadio.checked = true;
+                    }
+                    document.getElementById('experienceNumber').value = 0;
+                    printDoctors();
+                }
+                function printDoctors() {
+                        var params = [];
+                        var specialisations = document.querySelectorAll('input[name="specialisations"]:checked');
+                        if (specialisations.length > 0) {
+                            var specialisationsValues = [];
+                            specialisations.forEach(function(checkbox) {
+                                specialisationsValues.push(checkbox.value);
+                            });
+                            params.push('specialisations=' + specialisationsValues.join(','));
+                        }
+                        else {
+                            params.push('specialisations=');
+                        }
+                        var categories = document.querySelectorAll('input[name="categories"]:checked');
+                        if (categories.length > 0) {
+                            var categoriesValues = [];
+                            categories.forEach(function(checkbox) {
+                                categoriesValues.push(checkbox.value);
+                            });
+                            params.push('categories=' + categoriesValues.join(','));
+                        }
+                        else {
+                            params.push('categories=')
+                        }
+                        var experienceNumber = document.getElementById('experienceNumber').value;
+                        if (experienceNumber !== '') {
+                            var experienceSign = document.querySelector('input[name="experience"]:checked').value;
+                            params.push('experienceSign=' + experienceSign);
+                            params.push('experienceNumber=' + experienceNumber);
+                        }
+                        else {
+                            params.push('experienceSign=');
+                            params.push('experienceNumber=');
+                        }
+                        var filteredDoctorsListXHR = new XMLHttpRequest();
+                        var urlParams = params.join('&');
+                        filteredDoctorsListXHR.open('GET', '/sickRest/getFilteredDoctorsList?' + urlParams, true);
+                        filteredDoctorsListXHR.setRequestHeader("Authentication", getAuthenticationCookie());
+                        filteredDoctorsListXHR.onreadystatechange = function () {
+                            if (filteredDoctorsListXHR.readyState === 4 && filteredDoctorsListXHR.status === 200) {
+                                var filteredDoctorsList = JSON.parse(filteredDoctorsListXHR.responseText);
+                                var doctorsListContainer = document.getElementById('doctorsListContainer');
+                                dynamicBuildDoctorsList(doctorsListContainer, filteredDoctorsList);
+                            }
+                        }
+                        filteredDoctorsListXHR.send();
+                }
+
+                function dynamicBuildDoctorsList(doctorsListContainer, filteredDoctorsList) {
+                    doctorsListContainer.innerHTML = '';
+                    if (filteredDoctorsList.length !== 0) {
+                        for (let i = 0; i < filteredDoctorsList.length; i++) {
+                            var a = document.createElement('a');
+                            a.href = '/sick/doctor/' + filteredDoctorsList[i].id;
+                            a.style.textDecoration = 'none';
+                            a.style.color = 'black';
+                            var divElement = document.createElement('div');
+                            divElement.style.marginTop = '20px';
+                            divElement.style.paddingLeft = '20px';
+                            divElement.style.paddingRight = '20px';
+                            divElement.style.border = 'gray 1px solid'
+                            divElement.style.backgroundColor = 'white';
+                            divElement.style.borderRadius = '8px';
+                            divElement.style.width = '100%';
+                            var labelsDiv = document.createElement('div');
+                            labelsDiv.innerHTML =
+                                'ФИО:<br>' +
+                                'Специализация:<br>' +
+                                'Категория:<br>' +
+                                'Стаж (часов):<br>' +
+                                'Рейтинг:<br>' +
+                                'Стоимость приема (руб):';
+                            labelsDiv.style.textAlign = 'right';
+                            labelsDiv.style.display = 'inline-block';
+                            labelsDiv.style.fontWeight = '550';
+                            var valuesDiv = document.createElement('div');
+                            valuesDiv.innerHTML = filteredDoctorsList[i].surname + ' '
+                                + filteredDoctorsList[i].firstName + ' '
+                                + filteredDoctorsList[i].lastName + '<br>'
+                                + filteredDoctorsList[i].specialization + '<br>'
+                                + filteredDoctorsList[i].category + '<br>'
+                                + filteredDoctorsList[i].experience + '<br>'
+                                + filteredDoctorsList[i].rating + '/10<br>'
+                                + filteredDoctorsList[i].cost;
+                            valuesDiv.style.display = 'inline-block';
+                            valuesDiv.style.marginLeft = '10px';
+                            divElement.appendChild(labelsDiv);
+                            divElement.appendChild(valuesDiv);
+                            a.appendChild(divElement);
+                            doctorsListContainer.appendChild(a);
+                        }
+                        var space = document.createElement('div');
+                        space.style.height = '20px';
+                        doctorsListContainer.appendChild(space);
+                    }
+                    else {
+                        var p = document.createElement('p');
+                        p.innerHTML = 'не нашлось врачей по заданным параметрам';
+                        p.style.position = 'relative';
+                        p.style.width = 'max-content';
+                        p.style.left = '50%';
+                        p.style.transform = 'translateX(-50%)';
+                        p.style.fontSize = '18px';
+                        doctorsListContainer.appendChild(p);
+                    }
+                }
+            </script>
+        </div>
+    </div>
+</body>
+</html>

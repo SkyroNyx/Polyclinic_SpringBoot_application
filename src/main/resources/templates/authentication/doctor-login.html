@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>вход</title>
+</head>
+<style>
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    .main-content {
+        background-color: #6fc9fd;
+        width: 25%;
+        height: 100vh;
+        color: white;
+    }
+
+    .onCenter {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .label {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .big-label {
+        text-align: center;
+        font-size: 26px;
+    }
+
+    .input {
+        height: 30px;
+        background-color: #d6f0ff;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .button {
+        margin-top: 10px;
+        height: 30px;
+        background-color: #6fc9fd;
+        border-color: #d1eaf8;
+        border-radius: 5px;
+        color: white;
+        width: 150px;
+        font-size: 14px;
+    }
+
+    .error {
+        margin-top: 10px;
+        padding: 3px;
+        height: auto;
+        width: 160px;
+        background-color: #ffd993;
+        color: brown;
+        border: 1px solid #a66969;
+        border-radius: 5px;
+        text-align: center;
+    }
+</style>
+<body>
+<div class="main-content onCenter">
+    <form th:action="@{/doctor/loginAsDoctor}" th:method="post">
+<!--        <input type="hidden" th:name="${_csrf.parameterName}"  th:value="${_csrf.token}"/>-->
+        <br>
+        <p class="big-label">Войти как врач</p>
+        <p class="label">Введите номер телефона:</p>
+        <input type="text" name="username" id="username" class="input onCenter" placeholder="+7(000)000-00-00">
+        <p class="label">Введите пароль:</p>
+        <input type="password" name="password" id="password" class="input onCenter">
+        <div th:if="${param.error}" class="error onCenter">Неверный логин или пароль</div>
+        <div>
+            <input th:type="submit" th:value="Войти" class="button onCenter" onclick="deleteMaskFromPhoneInput()">
+        </div>
+    </form>
+    <a href="/auth"><button class="button onCenter">На главную</button></a>
+</div>
+<script src="https://unpkg.com/imask"></script>
+<script>
+    const element = document.getElementById('username');
+    const maskOptions = {
+        mask: '+{7}(000)000-00-00'
+    };
+    const mask = IMask(element, maskOptions);
+
+    function deleteMaskFromPhoneInput() {
+        var phoneInput = document.getElementById('username')
+        var phoneValue = phoneInput.value.replace(/\D/g, '');
+        phoneInput.value = phoneValue;
+    }
+</script>
+</body>
+</html>

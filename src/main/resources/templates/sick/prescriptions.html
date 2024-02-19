@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои назначения</title>
+</head>
+<style>
+
+    body {
+        background-color: #f4f4f4;
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .first-column {
+        position: fixed;
+        float: left;
+        width: 13%;
+        background-color: #6fc9fd;
+        height: 100vh;
+    }
+
+    .nav-list {
+        list-style: none;
+        text-decoration: none;
+    }
+
+    .nav-list-element {
+        text-decoration: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 7px;
+        background-color: #6fc9fd;
+        border: none;
+    }
+
+    .logout-list-button {
+        position: relative;
+        font-size: 16px;
+        right: 6px;
+    }
+
+    .nav-list-element:hover {
+        font-size: 19px;
+        text-decoration: underline white;
+    }
+
+    .second-column {
+        position: relative;
+        left: 13%;
+        float: left;
+        width: 84%;
+        margin-left: 20px;
+    }
+
+    .onCenter {
+        width: max-content;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .date-font {
+        font-size: 20px;
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    .prescription-row {
+        text-align: center;
+        display: table-row;
+    }
+
+    .prescription-cell1, .prescription-cell2,
+    .prescription-cell3, .prescription-cell4,
+    .prescription-cell5, .prescription-cell6,
+    .prescription-cell7
+    {
+        border: 1px solid #000;
+        padding: 6px  0 6px 0;
+        display: table-cell;
+    }
+
+    .prescription-cell1 {
+        width: 70px;
+    }
+
+    .prescription-cell2 {
+        width: 250px;
+    }
+
+    .prescription-cell3 {
+        width: 170px;
+    }
+
+    .prescription-cell4 {
+        width: 80px;
+    }
+
+    .prescription-cell5 {
+        width: 180px;
+    }
+
+    .prescription-cell6 {
+        width: 250px;
+    }
+
+    .prescription-cell7 {
+        width: 270px;
+    }
+
+</style>
+<body>
+<div class="first-column">
+  <ul class="nav-list">
+    <li><a th:href="@{/sick}" class="nav-list-element">Личный кабинет</a></li>
+    <li><a th:href="@{/sick/doctors}" class="nav-list-element">Список докторов</a></li>
+      <li><a th:href="@{/sick/prescriptions}" class="nav-list-element">Мои назначения</a></li>
+    <li><a th:href="@{/sick/about-polyclinic}" class="nav-list-element">О поликлинике</a></li>
+      <li>
+          <form action="/sick/logout" method="post">
+              <input type="submit" value="Выход" class="nav-list-element logout-list-button">
+          </form>
+      </li>
+  </ul>
+</div>
+
+<div class="second-column">
+    <h2 class="onCenter">Мои назначения</h2>
+    <div class="prescription-row">
+        <div class="prescription-cell1">Время</div>
+        <div class="prescription-cell2">Врач</div>
+        <div class="prescription-cell3">Специализация</div>
+        <div class="prescription-cell4">Стоимость</div>
+        <div class="prescription-cell5">Диагноз</div>
+        <div class="prescription-cell6">Рекомендации</div>
+        <div class="prescription-cell7">Лекарства</div>
+    </div>
+    <div th:each="date : ${dates}">
+        <div th:text="${date}" class="date-font"></div>
+        <div class="prescription-row" th:each="prescription : ${sickPrescriptionsHashMap.get(date)}">
+            <div class="prescription-cell1" th:text="${prescription.getAppointment().getFormatedTime()}">
+                Время</div>
+
+            <div class="prescription-cell2"><a th:text="${prescription.getAppointment().getDoctor().getSurname() + ' ' +
+                    prescription.getAppointment().getDoctor().getFirstName() + ' ' +
+                    prescription.getAppointment().getDoctor().getLastName()}"
+                                               th:href="@{/sick/doctor/{doctorId}
+                                               (doctorId = ${prescription.getAppointment().getDoctor().getId()})}">
+                Врач</a></div>
+
+            <div class="prescription-cell3" th:text="${prescription.getAppointment().getDoctor().getSpecialization()}">
+                Специализация</div>
+
+            <div class="prescription-cell4" th:text="${prescription.getAppointment().getDoctor().getCost()}">
+                Стоимость</div>
+
+            <div class="prescription-cell5" th:text="${prescription.getDiagnosis()}">
+                Диагноз</div>
+
+            <div class="prescription-cell6" th:text="${prescription.getRecommendations()}">Рекомендации</div>
+
+            <div class="prescription-cell7" >
+                <div th:text="${prescriptionMedicament.getMedicament()
+                            + ' : ' + prescriptionMedicament.getUse()}"
+                   th:each="prescriptionMedicament : ${prescription.getPrescriptionsMedicamentList()}">
+                    Лекарства</div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+</body>
+</html>
