@@ -16,6 +16,7 @@ public class SpringBootAppApplication {
 
 		SpringApplication.run(SpringBootAppApplication.class, args);
 		System.out.println("here");
+		System.out.println("here");
 	}
 
 	@Bean
