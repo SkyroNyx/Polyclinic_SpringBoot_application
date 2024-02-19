@@ -1,0 +1,29 @@
+[33mcommit 596848bbdf7108d4847e23253c95cfc5f789c4d4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;32mfirst_branch[m[33m)[m
+Author: Babaev Sergei <rutrackerorg2004@mail.ru>
+Date:   Mon Feb 19 20:07:42 2024 +0300
+
+    second commit in first_branch
+
+[33mcommit 508cfbc249cbbba5e1fd916727d8e8ef1d8aab05[m
+Author: Babaev Sergei <rutrackerorg2004@mail.ru>
+Date:   Mon Feb 19 20:06:42 2024 +0300
+
+    first commit in first_branch
+
+[33mcommit 70dba7be48e9c45945512e56c649d7d6c8fcbaa3[m[33m ([m[1;32msecond_branch[m[33m)[m
+Author: Babaev Sergei <rutrackerorg2004@mail.ru>
+Date:   Mon Feb 19 17:53:14 2024 +0300
+
+    version 1
+
+[33mcommit 5391f12d22c5f9acf131165ab791d369ff7d6f85[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: Babaev Sergei <rutrackerorg2004@mail.ru>
+Date:   Mon Feb 19 17:36:33 2024 +0300
+
+    second commit
+
+[33mcommit 7efca1da39b4d58d2c3d3995473df29021b610c0[m
+Author: Babaev Sergei <rutrackerorg2004@mail.ru>
+Date:   Mon Feb 19 17:28:59 2024 +0300
+
+    first commit

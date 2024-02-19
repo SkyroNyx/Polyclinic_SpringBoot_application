@@ -15,8 +15,11 @@ public class SpringBootAppApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(SpringBootAppApplication.class, args);
+<<<<<<< HEAD
 		System.out.println("here");
 		System.out.println("here");
+=======
+>>>>>>> parent of 508cfbc (first commit in first_branch)
 	}
 
 	@Bean
