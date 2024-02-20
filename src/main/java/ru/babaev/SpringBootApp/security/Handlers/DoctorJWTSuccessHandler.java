@@ -6,7 +6,6 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.stereotype.Component;
 import ru.babaev.SpringBootApp.Utils.DoctorJWTUtil;
 import ru.babaev.SpringBootApp.security.Doctor.DoctorDetails;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +28,7 @@ public class DoctorJWTSuccessHandler extends SavedRequestAwareAuthenticationSucc
         String jwtToken = doctorJWTUtil.generateToken(doctorDetails.getDoctor());
         Cookie jwtCookie = new Cookie("Authentication", jwtToken);
         response.addCookie(jwtCookie);
+        setDefaultTargetUrl("/doctor");
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }

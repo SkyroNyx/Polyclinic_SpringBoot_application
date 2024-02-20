@@ -3,7 +3,6 @@ package ru.babaev.SpringBootApp.security.Sick;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.babaev.SpringBootApp.Models.Sick;
-
 import java.util.Optional;
 
 @Repository

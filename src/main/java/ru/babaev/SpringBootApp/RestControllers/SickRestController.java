@@ -12,7 +12,6 @@ import ru.babaev.SpringBootApp.Models.Doctor;
 import ru.babaev.SpringBootApp.Services.DoctorService;
 import ru.babaev.SpringBootApp.Services.SickService;
 import ru.babaev.SpringBootApp.Utils.SickJWTUtil;
-
 import java.util.List;
 
 @RestController

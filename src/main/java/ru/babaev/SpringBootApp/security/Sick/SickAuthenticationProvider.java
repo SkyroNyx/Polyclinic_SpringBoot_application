@@ -27,8 +27,8 @@ public class SickAuthenticationProvider implements org.springframework.security.
         String login = authentication.getName();
         SickDetails sickDetails = (SickDetails) sickSecurityService.loadUserByUsername(login);
         String password  = authentication.getCredentials().toString();
-//        if (!passwordEncoder.matches(password, sickDetails.getPassword())) {
-        if (!password.equals(sickDetails.getPassword())) {
+        if (!passwordEncoder.matches(password, sickDetails.getPassword())) {
+//        if (!password.equals(sickDetails.getPassword())) {
                 throw new BadCredentialsException("Введен неверный пароль");
         }
         return new UsernamePasswordAuthenticationToken(sickDetails, sickDetails.getPassword(), sickDetails.getAuthorities());

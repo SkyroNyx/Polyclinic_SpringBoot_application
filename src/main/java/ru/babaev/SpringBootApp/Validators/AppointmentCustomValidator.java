@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.babaev.SpringBootApp.ObjectsToValidate.AppointmentToValidate;
 import ru.babaev.SpringBootApp.AppConstants.ApplicationConstants;
 import ru.babaev.SpringBootApp.Utils.CustomBindingResult;
-
 import java.io.IOException;
 
 @Component

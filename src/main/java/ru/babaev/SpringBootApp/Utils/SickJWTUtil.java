@@ -8,9 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.babaev.SpringBootApp.AppConstants.ApplicationConstants;
-import ru.babaev.SpringBootApp.Models.Doctor;
 import ru.babaev.SpringBootApp.Models.Sick;
-
 import java.time.ZonedDateTime;
 import java.util.Date;
 

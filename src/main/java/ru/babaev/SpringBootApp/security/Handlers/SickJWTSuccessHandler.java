@@ -4,11 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import ru.babaev.SpringBootApp.Utils.DoctorJWTUtil;
 import ru.babaev.SpringBootApp.Utils.SickJWTUtil;
-import ru.babaev.SpringBootApp.security.Doctor.DoctorDetails;
 import ru.babaev.SpringBootApp.security.Sick.SickDetails;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +29,7 @@ public class SickJWTSuccessHandler extends SavedRequestAwareAuthenticationSucces
         String jwtToken = sickJwtUtil.generateToken(sickDetails.getSick());
         Cookie jwtCookie = new Cookie("Authentication", jwtToken);
         response.addCookie(jwtCookie);
+        setDefaultTargetUrl("/sick");
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }

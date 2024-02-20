@@ -2,7 +2,6 @@ package ru.babaev.SpringBootApp.Configurations;
 
 import javax.persistence.EntityManagerFactory;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

@@ -7,7 +7,6 @@ import org.springframework.validation.Validator;
 import ru.babaev.SpringBootApp.ObjectsToValidate.SickToRegisterToValidate;
 import ru.babaev.SpringBootApp.Models.Sick;
 import ru.babaev.SpringBootApp.Services.SickService;
-
 import java.util.Optional;
 
 @Component

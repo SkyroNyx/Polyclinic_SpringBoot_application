@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.babaev.SpringBootApp.ObjectsToValidate.SickToRegisterToValidate;
 import ru.babaev.SpringBootApp.Services.RegistrationService;
 import ru.babaev.SpringBootApp.Validators.RegistrationValidator;
-
 import javax.validation.Valid;
 
 @Controller

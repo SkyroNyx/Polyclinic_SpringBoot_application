@@ -15,7 +15,6 @@ import ru.babaev.SpringBootApp.Models.*;
 import ru.babaev.SpringBootApp.Services.DoctorService;
 import ru.babaev.SpringBootApp.AppConstants.ApplicationConstants;
 import ru.babaev.SpringBootApp.Utils.DoctorJWTUtil;
-
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
